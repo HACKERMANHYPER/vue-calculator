@@ -1,30 +1,93 @@
 <template>
     <div class="calculator">
-        <div class="display">0</div>
-        <div>CE</div>
-        <div>C</div>
-        <div><BackIcon /></div>
-        <div>/</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-        <div>*</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>-</div>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>+</div>
-        <div>0</div>
+        <div class="display">{{ current }}</div>
+        <div @click="clear('all')">CE</div>
+        <div @click="clear('current')">C</div>
+        <div @click="clear('one')"><BackIcon /></div>
+        <div @click="setOperator('/')">/</div>
+        <div @click="displayUpdate(7)">7</div>
+        <div @click="displayUpdate(8)">8</div>
+        <div @click="displayUpdate(9)">9</div>
+        <div @click="setOperator('*')">*</div>
+        <div @click="displayUpdate(4)">4</div>
+        <div @click="displayUpdate(5)">5</div>
+        <div @click="displayUpdate(6)">6</div>
+        <div @click="setOperator('-')">-</div>
+        <div @click="displayUpdate(1)">1</div>
+        <div @click="displayUpdate(2)">2</div>
+        <div @click="displayUpdate(3)">3</div>
+        <div @click="setOperator('+')">+</div>
+        <div @click="displayUpdate(0)">0</div>
         <div>.</div>
-        <div class="equal">=</div>
+        <!-- TODO add comma -->
+        <div class="equal" @click="calc()">=</div>
     </div>
 </template>
 
 <script setup>
 import BackIcon from './BackIcon.vue';
+import { ref } from 'vue';
+
+let current = ref(0);
+let previous = 0;
+let operator;
+function clear(param) {
+    if (param == 'current') {
+        current.value = 0;
+    }
+    if (param == 'one') {
+        current.value = Math.floor(current.value / 10);
+    }
+    if (param == 'all') {
+        current.value = 0;
+        previous = 0;
+    }
+}
+function displayUpdate(number) {
+    number = number.toString();
+    current.value += number;
+    current.value = parseInt(current.value);
+}
+function setOperator(inputOperator) {
+    if (inputOperator == '*') {
+        operator = '*';
+
+        previous = current.value;
+        current.value = 0;
+    }
+    if (inputOperator == '/') {
+        operator = '/';
+
+        previous = current.value;
+        current.value = 0;
+    }
+    if (inputOperator == '-') {
+        operator = '-';
+
+        previous = current.value;
+        current.value = 0;
+    }
+    if (inputOperator == '+') {
+        operator = '+';
+
+        previous = current.value;
+        current.value = 0;
+    }
+}
+function calc() {
+    if (operator == '*') {
+        current.value = previous * current.value;
+    }
+    if (operator == '/') {
+        current.value = previous / current.value;
+    }
+    if (operator == '-') {
+        current.value = previous - current.value;
+    }
+    if (operator == '+') {
+        current.value = previous + current.value;
+    }
+}
 </script>
 
 <style>
