@@ -41,7 +41,7 @@ function clear(param) {
     if (param == 'all') {
         current.value = 0;
         previous = 0;
-    }
+    } //test
 }
 function displayUpdate(number) {
     number = number.toString();
