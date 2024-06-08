@@ -18,13 +18,14 @@
         <div @click="displayUpdate(3)">3</div>
         <div @click="setOperator('+')">+</div>
         <div @click="displayUpdate(0)">0</div>
-        <div>.</div>
+        <div @click="displayPoint()">.</div>
         <!-- TODO add comma -->
         <div class="equal" @click="calc()">=</div>
     </div>
 </template>
 
 <script setup>
+import { parse } from 'vue/compiler-sfc';
 import BackIcon from './BackIcon.vue';
 import { ref } from 'vue';
 
@@ -45,8 +46,13 @@ function clear(param) {
 }
 function displayUpdate(number) {
     number = number.toString();
-    current.value += number;
-    current.value = parseInt(current.value);
+    current.value == 0 ? (current.value = number) : (current.value += number);
+    current.value = parseFloat(current.value);
+}
+function displayPoint() {
+    current.value = current.value.toString();
+    current.value += '.'; //TODO fick diesen punkt
+    current.value = parseFloat(current.value);
 }
 function setOperator(inputOperator) {
     if (inputOperator == '*') {
@@ -112,6 +118,7 @@ function calc() {
     text-align: right;
     font-size: 2rem;
     font-weight: 500;
+    overflow: hidden;
 }
 .calculator .equal {
     grid-column: 3 / 5;
@@ -124,5 +131,13 @@ function calc() {
     border-radius: 2px;
     padding: 15px;
     font-weight: 500;
+}
+.calculator div:hover:not(:nth-child(1)) {
+    filter: brightness(120%);
+    cursor: pointer;
+    user-select: none;
+}
+.calculator div:active:not(:nth-child(1)) {
+    filter: brightness(80%);
 }
 </style>
